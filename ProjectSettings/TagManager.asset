@@ -1,0 +1,90 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!78 &1
+TagManager:
+  serializedVersion: 2
+  tags:
+  - Enemy
+  - PuertasTrigger
+  layers:
+  - Default
+  - TransparentFX
+  - Ignore Raycast
+  - 
+  - Water
+  - UI
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  m_SortingLayers:
+  - name: Fondo fondo
+    uniqueID: 403211131
+    locked: 0
+  - name: Mapas 2
+    uniqueID: 97663427
+    locked: 0
+  - name: Mapas
+    uniqueID: 1412588519
+    locked: 0
+  - name: Piso
+    uniqueID: 1921085733
+    locked: 0
+  - name: Paredes
+    uniqueID: 816195707
+    locked: 0
+  - name: mapas 3
+    uniqueID: 1807671389
+    locked: 0
+  - name: Paredes mapas
+    uniqueID: 4087875473
+    locked: 0
+  - name: Pick Up
+    uniqueID: 1408602763
+    locked: 0
+  - name: Default
+    uniqueID: 0
+    locked: 0
+  - name: Portales
+    uniqueID: 1368880541
+    locked: 0
+  - name: EnemigosPlayer
+    uniqueID: 996505505
+    locked: 0
+  - name: Arma
+    uniqueID: 3372799179
+    locked: 0
+  - name: Estatua
+    uniqueID: 3166614415
+    locked: 0
+  - name: Rastro Balas
+    uniqueID: 1183522183
+    locked: 0
+  - name: Balas
+    uniqueID: 1119505983
+    locked: 0
+  - name: Mini mapa cosas
+    uniqueID: 1581363487
+    locked: 0
