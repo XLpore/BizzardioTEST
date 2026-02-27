@@ -95,6 +95,7 @@ GameObject:
   - component: {fileID: 3857660431771427237}
   - component: {fileID: 655632185134360903}
   - component: {fileID: 8839600603572602087}
+  - component: {fileID: 4125948268955165465}
   m_Layer: 0
   m_Name: Hitbox
   m_TagString: Untagged
@@ -216,6 +217,18 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 2.3993745, y: 1.0802668}
   m_EdgeRadius: 0
+--- !u!114 &4125948268955165465
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7637299334385935361}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 285116305cd8ad543ba2d683bba5d5ba, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &7974302117947596838
 GameObject:
   m_ObjectHideFlags: 0
@@ -330,7 +343,7 @@ Animator:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7974302117947596838}
-  m_Enabled: 0
+  m_Enabled: 1
   m_Avatar: {fileID: 0}
   m_Controller: {fileID: 9100000, guid: ea8968463ba1adb459498b64e45383fc, type: 2}
   m_CullingMode: 0
