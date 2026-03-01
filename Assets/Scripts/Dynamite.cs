@@ -15,6 +15,9 @@ public class Dynamite : MonoBehaviour
     [SerializeField] private float explosionDamage = 2f;
     [SerializeField] private float explosionRadius = 2f;
 
+    [Header("movement")]
+    [SerializeField] private float moveSpeed = 2f;
+
     private Transform player;
     private Animator anim;
 
@@ -40,7 +43,10 @@ public class Dynamite : MonoBehaviour
         if (distance <= detectionRadius)
         {
             StartCharge();
+           
         }
+        MoveTowardsPlayer();
+
     }
 
     private void StartCharge()
@@ -128,5 +134,18 @@ public class Dynamite : MonoBehaviour
 
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(transform.position, explosionRadius);
+    }
+    private void MoveTowardsPlayer()
+    {
+        Vector2 direction = (player.position - transform.position).normalized;
+
+        transform.position += (Vector3)(direction * moveSpeed * Time.deltaTime);
+
+        // Enviar valores al Blend Tree
+        if (anim != null)
+        {
+            anim.SetFloat("tntx", direction.x);
+            anim.SetFloat("tnty", direction.y);
+        }
     }
 }
