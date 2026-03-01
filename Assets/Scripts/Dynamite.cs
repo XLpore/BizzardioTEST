@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Dynamite : MonoBehaviour
@@ -15,9 +14,6 @@ public class Dynamite : MonoBehaviour
     [SerializeField] private float explosionDamage = 2f;
     [SerializeField] private float explosionRadius = 2f;
 
-    [Header("movement")]
-    [SerializeField] private float moveSpeed = 2f;
-
     private Transform player;
     private Animator anim;
 
@@ -30,23 +26,20 @@ public class Dynamite : MonoBehaviour
         if (playerGO != null)
             player = playerGO.transform;
 
-        // Animator en el sprite hijo
-        anim = GetComponentInChildren<Animator>();
+        anim = GetComponent<Animator>();
     }
 
     private void Update()
     {
-        if (player == null || charging || exploded) return;
+        if (player == null || exploded) return;
 
         float distance = Vector2.Distance(transform.position, player.position);
 
-        if (distance <= detectionRadius)
+        // Empieza a cargar cuando entra en el radio
+        if (distance <= detectionRadius && !charging)
         {
             StartCharge();
-           
         }
-        MoveTowardsPlayer();
-
     }
 
     private void StartCharge()
@@ -73,38 +66,31 @@ public class Dynamite : MonoBehaviour
         if (anim != null)
             anim.SetTrigger("Explode");
 
-        
-        Collider2D[] hits = Physics2D.OverlapCircleAll(
-            transform.position,
-            explosionRadius
-        );
+        // Detecta todos los colliders en el radio de explosión
+        Collider2D[] hits = Physics2D.OverlapCircleAll(transform.position, explosionRadius);
 
         foreach (Collider2D hit in hits)
         {
-            PlayerDamageReceiver player =
-                hit.GetComponent<PlayerDamageReceiver>();
-
-            if (player != null)
+            // DAÑO AL PLAYER
+            PlayerDamageReceiver playerDamage = hit.GetComponent<PlayerDamageReceiver>();
+            if (playerDamage != null)
             {
-                player.ApplyDamage();
-                player.ApplyDamage(); // 2 de daño
+                playerDamage.ApplyDamage();
+                playerDamage.ApplyDamage(); // 2 de daño
             }
 
-            // === FLASH DE PANTALLA ===
-            PlayerCollisionTrigger flash =
-                hit.GetComponent<PlayerCollisionTrigger>();
-
-            if (flash != null)
+            // DAÑO A ENEMIGOS
+            Enemy enemy = hit.GetComponent<Enemy>();
+            if (enemy != null)
             {
-                flash.TriggerFromExplosion();
+                enemy.TakeDamage(explosionDamage);
             }
         }
 
-
+        // Destruye la TNT después de la animación de explosión
         Destroy(gameObject, 0.6f);
     }
 
-    
     public void TakeDamage(float damage)
     {
         if (exploded) return;
@@ -113,18 +99,13 @@ public class Dynamite : MonoBehaviour
 
         if (life <= 0f)
         {
-            DieWithoutExplosion();
+            Destroy(gameObject);
         }
         else
         {
             if (anim != null)
                 anim.SetTrigger("Damage");
         }
-    }
-
-    private void DieWithoutExplosion()
-    {
-        Destroy(gameObject);
     }
 
     private void OnDrawGizmosSelected()
@@ -134,18 +115,5 @@ public class Dynamite : MonoBehaviour
 
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(transform.position, explosionRadius);
-    }
-    private void MoveTowardsPlayer()
-    {
-        Vector2 direction = (player.position - transform.position).normalized;
-
-        transform.position += (Vector3)(direction * moveSpeed * Time.deltaTime);
-
-        // Enviar valores al Blend Tree
-        if (anim != null)
-        {
-            anim.SetFloat("tntx", direction.x);
-            anim.SetFloat("tnty", direction.y);
-        }
     }
 }

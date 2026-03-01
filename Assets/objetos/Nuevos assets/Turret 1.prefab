@@ -50,7 +50,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   detectionRadius: 15.2
-  rotationSpeed: 33
+  rotationSpeed: 39
   bulletPrefab: {fileID: 7644534130510643235, guid: 9ed18220db3096146929f4925a248d95, type: 3}
   firePoint: {fileID: 2277430361529827201}
   fireCooldown: 1.5
