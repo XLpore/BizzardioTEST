@@ -3,6 +3,7 @@ using UnityEngine;
 public class Movement : MonoBehaviour
 {
     private Rigidbody2D rb2D;
+    private Animator animator;
 
     [SerializeField] private Gunner gunner; //  rreferencia al Gunner
 
@@ -16,10 +17,11 @@ public class Movement : MonoBehaviour
     private void Awake()
     {
         rb2D = GetComponent<Rigidbody2D>();
+        animator = GetComponent<Animator>();
 
         if (gunner == null)
         {
-            gunner = GetComponent<Gunner>(); 
+            gunner = GetComponent<Gunner>();
         }
     }
 
@@ -30,12 +32,23 @@ public class Movement : MonoBehaviour
 
         direction = new Vector3(x, y);
 
+        if (direction.x != 0)
+        {
+            animator.SetFloat("X", direction.x);
+            animator.SetFloat("Y", 0);
+        }
+        else
+        {
+            animator.SetFloat("X", 0);
+            animator.SetFloat("Y", direction.y);
+        }
+
         if (rb2D.velocity.magnitude < 1.8f)
         {
             canMove = true;
         }
 
-        
+
         switch (gunner.CurrentColor)
         {
             case ColorState.Green:
