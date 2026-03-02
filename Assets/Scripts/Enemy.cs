@@ -24,15 +24,11 @@ public class Enemy : MonoBehaviour
 
     private void Start()
     {
-        // Animator (OPCIONAL)
         _anim = GetComponentInChildren<Animator>();
 
         if (_anim != null)
-        {
             _anim.SetInteger("Life", Mathf.FloorToInt(CurrentLife));
-        }
 
-        // NavMeshAgent (opcional para torretas)
         agent = GetComponent<NavMeshAgent>();
         if (agent != null)
         {
@@ -47,9 +43,7 @@ public class Enemy : MonoBehaviour
             target = playerGO.transform;
 
             if (playerDamageReceiver == null)
-            {
                 playerDamageReceiver = playerGO.GetComponent<PlayerDamageReceiver>();
-            }
         }
         else
         {
@@ -74,9 +68,7 @@ public class Enemy : MonoBehaviour
         Movement playerCollision = collision.GetComponent<Movement>();
 
         if (playerCollision != null)
-        {
             playerCollision.Push(direction.normalized);
-        }
     }
 
     public void TakeDamage(float damage)
@@ -86,9 +78,7 @@ public class Enemy : MonoBehaviour
         CurrentLife -= damage;
 
         if (_anim != null)
-        {
             _anim.SetInteger("Life", Mathf.FloorToInt(CurrentLife));
-        }
 
         if (CurrentLife > 0f)
         {
@@ -100,7 +90,16 @@ public class Enemy : MonoBehaviour
         }
         else
         {
-            StartCoroutine(DieAndDestroy());
+            //  Si es TNT, llamar Explode en lugar de Die
+            Dynamite dyn = GetComponent<Dynamite>();
+            if (dyn != null)
+            {
+                dyn.Explode(); // siempre Explode
+            }
+            else
+            {
+                StartCoroutine(DieAndDestroy());
+            }
         }
     }
 
@@ -109,23 +108,17 @@ public class Enemy : MonoBehaviour
         muerto = true;
 
         if (_anim != null)
-        {
             _anim.SetTrigger("Die");
-        }
 
         if (agent != null)
-        {
             agent.enabled = false;
-        }
 
         // Chance 1 de 10 de dar vida al jugador
         if (playerDamageReceiver != null)
         {
             int chance = Random.Range(1, 11);
             if (chance == 1)
-            {
                 playerDamageReceiver.AddLife(1);
-            }
         }
 
         // Spawn de slimes hijos
@@ -145,8 +138,6 @@ public class Enemy : MonoBehaviour
     private void ReturnToIdle()
     {
         if (_anim != null)
-        {
             _anim.SetTrigger("BackToIdle");
-        }
     }
 }

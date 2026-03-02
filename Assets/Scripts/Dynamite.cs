@@ -35,7 +35,7 @@ public class Dynamite : MonoBehaviour
 
         float distance = Vector2.Distance(transform.position, player.position);
 
-        // Empieza a cargar cuando entra en el radio
+        // Charge automático cuando el jugador se acerca
         if (distance <= detectionRadius && !charging)
         {
             StartCharge();
@@ -58,20 +58,35 @@ public class Dynamite : MonoBehaviour
         Explode();
     }
 
-    private void Explode()
+    // Pública para que el Enemy la llame o se dispare por proximidad
+    public void Explode()
     {
         if (exploded) return;
         exploded = true;
 
+        // Siempre Explode, sin importar cómo murió
         if (anim != null)
             anim.SetTrigger("Explode");
 
-        // Detecta todos los colliders en el radio de explosión
+        // Desactivar Enemy para que no interfiera
+        Enemy enemy = GetComponent<Enemy>();
+        if (enemy != null)
+        {
+            enemy.StopAllCoroutines();
+            enemy.enabled = false;
+        }
+
+        StartCoroutine(ExplosionRoutine());
+    }
+
+    private IEnumerator ExplosionRoutine()
+    {
+        yield return new WaitForSeconds(0.1f);
+
         Collider2D[] hits = Physics2D.OverlapCircleAll(transform.position, explosionRadius);
 
         foreach (Collider2D hit in hits)
         {
-            // DAÑO AL PLAYER
             PlayerDamageReceiver playerDamage = hit.GetComponent<PlayerDamageReceiver>();
             if (playerDamage != null)
             {
@@ -79,16 +94,15 @@ public class Dynamite : MonoBehaviour
                 playerDamage.ApplyDamage(); // 2 de daño
             }
 
-            // DAÑO A ENEMIGOS
-            Enemy enemy = hit.GetComponent<Enemy>();
-            if (enemy != null)
+            Enemy otherEnemy = hit.GetComponent<Enemy>();
+            if (otherEnemy != null && otherEnemy != GetComponent<Enemy>())
             {
-                enemy.TakeDamage(explosionDamage);
+                otherEnemy.TakeDamage(explosionDamage);
             }
         }
 
-        // Destruye la TNT después de la animación de explosión
-        Destroy(gameObject, 0.6f);
+        yield return new WaitForSeconds(0.5f);
+        Destroy(gameObject);
     }
 
     public void TakeDamage(float damage)
@@ -99,7 +113,7 @@ public class Dynamite : MonoBehaviour
 
         if (life <= 0f)
         {
-            Destroy(gameObject);
+            Explode(); //  siempre Explode al morir
         }
         else
         {
